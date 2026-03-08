@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brick Breaker Arcade</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <nav>
+      <button onclick="showSection('home')">Home</button>
+      <button onclick="showSection('play')">Play</button>
+      <button onclick="showSection('leaderboard')">LeaderBoard</button>
+      <button onclick="showSection('forum')">Forum</button>
+    </nav>
+
+    <section id="home" class="active">
+      <h1>Brick Breaker Arcade</h1>
+      <p>Break all the bricks and reach higher levels</p>
+    </section>
+
+    <section id="play" class="active">
+      <div id="scorePanel">
+        Score: <span id="score">0</span> | Lives: <span id="lives">3</span> |
+        Levels: <span id="level">1</span>
+      </div>
+
+      <div id="gameArea">
+        <div id="ball"></div>
+        <div id="paddle"></div>
+      </div>
+      <br />
+      <button onclick="restartGame()">Restart Game</button>
+    </section>
+
+    <section id="leaderboard">
+      <h2>LeaderBoard</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody"></tbody>
+      </table>
+    </section>
+
+    <section id="forum">
+        <h2>Forum</h2>
+        <input type="text" id="username" placeholder="Your name">
+        <textarea id="comment" placeholder="Your comment"></textarea>
+        <br>
+        <button onclick="addComment()">Post</button>
+        <div id="commentSection"></div>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>
