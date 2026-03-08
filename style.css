@@ -1,0 +1,204 @@
+*{
+    margin: 0;
+    font-family: "Nunito", sans-serif;
+    color: white;
+    text-align: center;
+}
+
+h1{
+    font-size: 48px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #ff00cc, #00ffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px #ff00cc, 0 0 20px #00ffff;
+    animation: glow 1.5s infinite alternate;
+}
+
+h2{
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #ff00cc; }
+    to { text-shadow: 0 0 20px #00ffff; }
+}
+
+body{
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(circle at center, #1a0033, #000000);
+    color: white;
+    text-align: center;
+}
+
+nav{
+    background: #222;;
+    padding: 10px;
+}
+
+nav button{
+    background: linear-gradient(45deg, #ff512f, #dd2476);
+    color: white;
+    font-weight: 400;
+    cursor: pointer;
+    margin: 5px;
+    padding: 8px 15px;
+    border: none;
+    transition: 0.3s;
+    font-size:  14px;
+    letter-spacing: 2px;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+}
+
+nav button:hover{
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #ff512f;
+}
+
+section{
+    display: none;
+    padding: 20px;
+}
+
+.active{
+    display: block;
+}
+
+#gameArea{
+    width: 600px;
+    height: 400px;
+    background: linear-gradient(to bottom, #fff44f, #ffd600);
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid #0d47a1;  
+    box-shadow:
+        0 0 15px #2962ff,
+        0 0 30px #2979ff,
+        0 0 45px rgba(41, 121, 255, 0.6);
+}
+
+#ball {
+    width: 15px;
+    height: 15px;
+    background: radial-gradient(circle at 30% 30%, white, #ff00cc);
+    border-radius: 50%;
+    position: absolute;
+    /* box-shadow: 0 0 15px #ff00cc; */
+}
+
+#paddle {
+    width: 100px;
+    height: 12px;
+    background: #1b5e20;   
+    position: absolute;
+    bottom: 15px;
+    left: 5px;
+    border-radius: 6px;
+    /* box-shadow: 
+        0 0 10px #2e7d32,
+        0 0 20px rgba(46, 125, 50, 0.6); */
+}
+
+.brick{
+    width: 70px;
+    height: 20px;
+    background: linear-gradient(45deg, #ff00cc, #3333ff);
+    /* box-shadow: 0 0 10px #ff00cc, 0 0 20px #3333ff; */
+    position: absolute;
+}
+
+#scorePanel{
+    margin: 30px;
+    font-size:  20px;
+    letter-spacing: 2px;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0 0 15px #ff512f;
+    background: linear-gradient(90deg, #ff512f, #dd2476);
+}
+
+#leaderboard.active{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+table {
+    width: 50%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: linear-gradient(45deg, #2b0a3d, #001f3f);
+    box-shadow: 0 0 20px #00ffff;
+}
+
+th {
+    background: linear-gradient(45deg, #ff00cc, #ff512f);
+    padding: 12px;
+}
+
+td {
+    background: rgba(0, 255, 255, 0.1);
+    padding: 10px;
+}
+
+#commentSection p{
+    background: rgba(255,255,255,0.15);
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 15px;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input, textarea{
+    color: black;
+    padding: 5px;
+    margin: 5px;
+}
+
+#forum input,
+#forum textarea{
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+}
+
+#forum textarea{
+    width: 250px;
+    height: 60px;
+}
+
+#forum button{
+    margin-top: 15px;
+    padding: 12px 25px;
+}
+
+button{
+    background: linear-gradient(45deg, #00ffff, #0077ff);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+button:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+    box-shadow: 0 0 15px #00ffff;
+}

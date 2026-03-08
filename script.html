@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brick Breaker Arcade</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    text-align: center;
+}
+
+nav {
+    background: #222;
+    padding: 10px;
+}
+
+nav button {
+    margin: 5px;
+    padding: 8px 15px;
+    background: orange;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+section {
+    display: none;
+    padding: 20px;
+}
+
+.active {
+    display: block;
+}
+
+#gameArea {
+    width: 600px;
+    height: 400px;
+    background: black;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid white;
+}
+
+#ball {
+    width: 15px;
+    height: 15px;
+    background: orange;
+    border-radius: 50%;
+    position: absolute;
+}
+
+#paddle {
+    width: 100px;
+    height: 12px;
+    background: white;
+    position: absolute;
+    bottom: 0;
+}
+
+.brick {
+    width: 70px;
+    height: 20px;
+    background: cyan;
+    position: absolute;
+}
+
+#scorePanel {
+    margin: 10px;
+}
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 50%;
+}
+
+th, td {
+    border: 1px solid white;
+    padding: 8px;
+}
+
+input, textarea {
+    padding: 5px;
+    margin: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('play')">Play</button>
+    <button onclick="showSection('leaderboard')">Leaderboard</button>
+    <button onclick="showSection('forum')">Forum</button>
+</nav>
+
+<section id="home" class="active">
+    <h1>🎮 Brick Breaker Arcade</h1>
+    <p>Break all bricks and reach higher levels!</p>
+</section>
+
+<section id="play">
+    <div id="scorePanel">
+        Score: <span id="score">0</span> |
+        Lives: <span id="lives">3</span> |
+        Level: <span id="level">1</span>
+    </div>
+
+    <div id="gameArea">
+        <div id="ball"></div>
+        <div id="paddle"></div>
+    </div>
+    <br>
+    <button onclick="restartGame()">Restart</button>
+</section>
+
+<section id="leaderboard">
+    <h2>🏆 Leaderboard</h2>
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Score</th></tr>
+        </thead>
+        <tbody id="leaderboardBody"></tbody>
+    </table>
+</section>
+
+<section id="forum">
+    <h2>💬 Forum</h2>
+    <input type="text" id="username" placeholder="Your Name">
+    <textarea id="comment" placeholder="Write comment"></textarea>
+    <br>
+    <button onclick="addComment()">Post</button>
+    <div id="commentsSection"></div>
+</section>
+
+<script>
+function showSection(id){
+    document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+/* GAME LOGIC */
+
+const ball = document.getElementById("ball");
+const paddle = document.getElementById("paddle");
+const gameArea = document.getElementById("gameArea");
+
+let ballX = 290, ballY = 350;
+let dx = 3, dy = -3;
+
+let paddleX = 250;
+let score = 0, lives = 3, level = 1;
+
+let bricks = [];
+
+function createBricks(){
+    bricks.forEach(b=>b.remove());
+    bricks = [];
+    for(let row=0; row<3+level; row++){
+        for(let col=0; col<7; col++){
+            let brick = document.createElement("div");
+            brick.classList.add("brick");
+            brick.style.left = (col*80+20)+"px";
+            brick.style.top = (row*30+20)+"px";
+            gameArea.appendChild(brick);
+            bricks.push(brick);
+        }
+    }
+}
+createBricks();
+
+function update(){
+    ballX += dx;
+    ballY += dy;
+
+    if(ballX<=0 || ballX>=585) dx=-dx;
+    if(ballY<=0) dy=-dy;
+
+    if(ballY>=385){
+        if(ballX>paddleX && ballX<paddleX+100){
+            dy=-dy;
+        } else {
+            lives--;
+            document.getElementById("lives").innerText=lives;
+            if(lives==0){
+                saveScore();
+                alert("Game Over!");
+                restartGame();
+            }
+            ballX=290; ballY=350;
+        }
+    }
+
+    bricks.forEach((brick,index)=>{
+        let bx = brick.offsetLeft;
+        let by = brick.offsetTop;
+        if(ballX>bx && ballX<bx+70 && ballY>by && ballY<by+20){
+            dy=-dy;
+            brick.remove();
+            bricks.splice(index,1);
+            score+=10;
+            document.getElementById("score").innerText=score;
+
+            if(bricks.length==0){
+                level++;
+                document.getElementById("level").innerText=level;
+                createBricks();
+                ballX=290; ballY=350;
+                dx+=1;
+            }
+        }
+    });
+
+    ball.style.left = ballX+"px";
+    ball.style.top = ballY+"px";
+    paddle.style.left = paddleX+"px";
+
+    requestAnimationFrame(update);
+}
+
+document.addEventListener("keydown",e=>{
+    if(e.key==="ArrowRight" && paddleX<500) paddleX+=20;
+    if(e.key==="ArrowLeft" && paddleX>0) paddleX-=20;
+});
+
+update();
+
+function restartGame(){
+    location.reload();
+}
+
+/* LEADERBOARD */
+
+function saveScore(){
+    let name = prompt("Enter your name:");
+    let data = JSON.parse(localStorage.getItem("leaderboard"))||[];
+    data.push({name,score});
+    data.sort((a,b)=>b.score-a.score);
+    localStorage.setItem("leaderboard",JSON.stringify(data));
+    loadLeaderboard();
+}
+
+function loadLeaderboard(){
+    let data = JSON.parse(localStorage.getItem("leaderboard"))||[];
+    let body=document.getElementById("leaderboardBody");
+    body.innerHTML="";
+    data.forEach(p=>{
+        body.innerHTML+=`<tr><td>${p.name}</td><td>${p.score}</td></tr>`;
+    });
+}
+loadLeaderboard();
+
+/* FORUM */
+
+function addComment(){
+    let name=document.getElementById("username").value;
+    let comment=document.getElementById("comment").value;
+    let data=JSON.parse(localStorage.getItem("comments"))||[];
+    data.push({name,comment});
+    localStorage.setItem("comments",JSON.stringify(data));
+    loadComments();
+}
+
+function loadComments(){
+    let data=JSON.parse(localStorage.getItem("comments"))||[];
+    let section=document.getElementById("commentsSection");
+    section.innerHTML="";
+    data.forEach(c=>{
+        section.innerHTML+=`<p><b>${c.name}:</b> ${c.comment}</p>`;
+    });
+}
+loadComments();
+</script>
+
+</body>
+</html>
